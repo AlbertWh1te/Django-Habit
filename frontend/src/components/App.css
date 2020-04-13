@@ -1,0 +1,11 @@
+.nav {
+    background-color:rebeccapurple;
+    color:blue;
+    font-size: 30px;
+}
+
+.nav-link{
+    color:white;
+    border: 1px solid white;
+    padding: 1em;
+}
