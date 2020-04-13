@@ -19,7 +19,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
-from .private_settings import SECRET_KEY
 
 
 DEBUG = True
@@ -27,7 +26,9 @@ DEBUG = True
 if DEBUG:
     ALLOWED_HOSTS = ["*"]
     CORS_ORIGIN_ALLOW_ALL = True
+    SECRET_KEY = "myawesomesecretkey"
 else:
+    from .private_settings import SECRET_KEY
     ALLOWED_HOSTS = []
     CORS_ORIGIN_WHITELIST = [
     "https://wh1te.org/habit"
