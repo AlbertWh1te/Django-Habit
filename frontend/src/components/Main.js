@@ -1,8 +1,9 @@
-import React from "react";
-import Button from '@material-ui/core/Button';
-import { Switch, Route, Link } from "react-router-dom";
-import Login from "./login";
-import { userContext } from './common/userContext';
+import React from "react"
+import Button from '@material-ui/core/Button'
+import { Switch, Route, Link } from "react-router-dom"
+import { userContext } from './common/UserContext'
+import Login from "./Login"
+import HabitHistory from "./habit/HabitHistory"
 
 function Main(props) {
     return (
@@ -23,17 +24,19 @@ function Main(props) {
                             </div>
                         );
                     }
+                    // logged in case
                     else {
                         return (
                             <div>
                                 <nav className="nav">
                                     <Link className={"nav-link"} to={"/"}>Home</Link>
                                 </nav>
+                                <Button onClick={logoutUser}>Logout</Button>
                                 <Switch>
                                     <Route path={"/"} render={() => <div>Home again</div>} />
                                 </Switch>
-                                <Button onClick={logoutUser}>Logout</Button>
                                 <h1>user is logged in</h1>
+                                <HabitHistory />
                             </div>
                         );
                     }
