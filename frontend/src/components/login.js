@@ -7,7 +7,8 @@ import axiosInstance from "./common/axiosApi";
 class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = { username: "", password: "" };
+        this.loginState = props.login
+        this.state = { username: "", password: "", error: false };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -22,6 +23,7 @@ class Login extends Component {
         let formData = new FormData();
         formData.set('username', this.state.username);
         formData.set('password', this.state.password);
+        // TODO: more abstraction
         axiosInstance.post('/token/',
             formData
         ).then(
@@ -29,10 +31,17 @@ class Login extends Component {
                 axiosInstance.defaults.headers['Authorization'] = "Bearer " + result.data.access
                 localStorage.setItem('access_token', result.data.access);
                 localStorage.setItem('refresh_token', result.data.refresh);
-                console.log("log in success")
+                this.loginState()
             }
         ).catch(error => {
-            throw error;
+            if (error.response.status === 401) {
+                this.setState({
+                    error: true
+                }
+                )
+            } else {
+                console.log(error)
+            }
         })
     }
 
@@ -50,8 +59,16 @@ class Login extends Component {
                     </label>
                     <Button type="submit" variant="contained" color="primary" value="Submit" >Submit</Button>
                 </form>
+                <ErrorMessage error={this.state.error} />
             </div>
         )
     }
+}
+
+const ErrorMessage = (info) => {
+    if (info.error) {
+        return <div>username or password wrong</div>
+    }
+    return null
 }
 export default Login;
