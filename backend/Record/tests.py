@@ -40,7 +40,7 @@ class HabitTest(TestCase):
         self.client.defaults["HTTP_AUTHORIZATION"] = "Bearer " + self.access_token
 
     def clearn_jwt_token(self):
-        self.client.defaults["HTTP_AUTHORIZATION"] = "" 
+        self.client.defaults["HTTP_AUTHORIZATION"] = ""
 
     def test_login_suceess(self):
         # send login data
@@ -54,6 +54,26 @@ class HabitTest(TestCase):
         response = self.client.post("/api/token/", test_credentials, follow=True)
         # HTTP 401: Unauthorized
         self.assertEqual(response.status_code, 401)
+
+    def test_create_user_habit(self):
+        test_data = {"name": "test1"}
+        self.add_jwt_token()
+        response = self.client.post("/api/habit/", test_data, format="json")
+        # HTTP 201: Created
+        self.assertEqual(response.status_code, 201)
+        # check totall number
+        response = self.client.get("/api/habit/", format="json")
+        self.assertEqual(response.json()["count"], HABIT_NUMBER + 1)
+
+    def test_create_user_record(self):
+        test_data = {"habit": 1}
+        self.add_jwt_token()
+        response = self.client.post("/api/record/", test_data, format="json")
+        # HTTP 201: Created
+        self.assertEqual(response.status_code, 201)
+        # check totall number
+        response = self.client.get("/api/record/", format="json")
+        self.assertEqual(response.json()["count"], HABIT_NUMBER * RECROD_NUMBER + 1)
 
     def test_get_user_habit(self):
         # check create habits in db success

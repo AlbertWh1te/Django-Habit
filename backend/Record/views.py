@@ -17,7 +17,7 @@ class RecordListView(generics.ListCreateAPIView):
 
 class HabitListView(generics.ListCreateAPIView):
     serializer_class = HabitSerializer
-    # permission_classes = (permissions.IsAuthenticated,)
+    permission_classes = (permissions.IsAuthenticated,)
 
     def get_queryset(self):
         queryset = Habit.objects.filter(account=self.request.user)
